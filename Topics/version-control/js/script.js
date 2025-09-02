@@ -58,7 +58,7 @@ function draw() {
     // No line around the shape
     noStroke();
     // Make it red (RGB)
-    fill(255, 0, 0);
+    fill(255, 134, 0);
     // Draw a 100x100 circle at the mouse position
     ellipse(mouseX, mouseY, 100, 100);
     pop();
