@@ -14,7 +14,7 @@
 */
 function setup() {
     // A 640x480 canvas
-    createCanvas(640, 640);
+    createCanvas(720, 720);
 
     // Don't show the cursor
     noCursor();
@@ -57,7 +57,7 @@ function draw() {
     push();
     // No line around the shape
     noStroke();
-    // Make it red (RGB)
+    // Make it purple (RGB)
     fill(255, 0, 0);
     // Draw a 100x100 circle at the mouse position
     ellipse(mouseX, mouseY, 100, 100);
