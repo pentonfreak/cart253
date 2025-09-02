@@ -26,7 +26,7 @@ function setup() {
 */
 function draw() {
     // Make the background black (specified as RGB)
-    background(1, 3, 5);
+    background(0, 0, 0);
 
     // Draw a pyramid
     // How many levels for the pyramid
@@ -57,8 +57,8 @@ function draw() {
     push();
     // No line around the shape
     noStroke();
-    // Make it purple (RGB)
-    fill(255, 0, 0);
+    // Make it red (RGB)
+    fill(200, 0, 0);
     // Draw a 100x100 circle at the mouse position
     ellipse(mouseX, mouseY, 100, 100);
     pop();
