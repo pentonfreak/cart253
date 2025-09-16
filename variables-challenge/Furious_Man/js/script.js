@@ -68,6 +68,23 @@ function draw() {
     // makes him redder
     mrFurious.fill.r = mrFurious.fill.r + 5;
 
+
+    //makes sky loop
+    if (sky.b <= 0) {
+        sky.b = 255;
+    }
+
+    //makes him loop
+    if (mrFurious.fill.r >= 500) {
+        mrFurious.fill.r = 50;
+        mrFurious.size = 100;
+    }
+
+    //makes bird reappear
+    if (bird.x > width) {
+        bird.x = 50;
+    }
+
     // Draw Mr. Furious as a coloured circle
     push();
     noStroke();
@@ -79,9 +96,11 @@ function draw() {
 //makes him bigger
     fill(mrFurious.fill.r, mrFurious.fill.g, mrFurious.fill.b);
     mrFurious.size = mrFurious.size + 1;
+
     ellipse(mrFurious.x, mrFurious.y, mrFurious.size);
     pop();
 
+    //Moves bird
     bird.x += bird.speed;
 
     ellipse(bird.x, bird.y, bird.size);
