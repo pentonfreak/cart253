@@ -66,10 +66,10 @@ function mousePressed() {
   gameOver = true;
 }
 
-//End the game if the mouse is moved
-function mouseMoved() {
-  gameOver = true;
-}
+//End the game if the mouse is moved (this is not fair for other game enders, so i disabled it for now)
+//function mouseMoved() {
+// gameOver = true;
+//}
 
 //End the game if the middle mouse is scrolled
 function mouseWheel() {
