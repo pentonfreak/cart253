@@ -15,6 +15,11 @@
 
 "use strict";
 
+// Whether the game has started (press any key or click to begin)
+let gameStarted = false;
+// Player score
+let score = 0;
+
 // Our frog
 const frog = {
     // The frog's body has a position and size
@@ -55,11 +60,24 @@ function setup() {
 
 function draw() {
     background("#87ceeb");
+
+    // If the game hasn't started yet, show the start screen
+    if (!gameStarted) {
+        // Draw a static scene behind the start overlay so the canvas isn't empty
+        drawFly();
+        drawFrog();
+        startScreen();
+        return;
+    }
+
+    // Main game loop
     moveFly();
     drawFly();
     moveFrog();
     moveTongue();
     drawFrog();
+    // Draw score on top of game
+    drawScore();
     checkTongueFlyOverlap();
 }
 
@@ -161,8 +179,39 @@ function drawFrog() {
     noStroke();
     ellipse(frog.body.x - 30, frog.body.y - 50, 40);
     ellipse(frog.body.x + 30, frog.body.y - 50, 40);
+    // Draw pupils that follow the fly, constrained inside each eye
+    const eyeOffsetX = 30;
+    const eyeOffsetY = -50;
+    const pupilDiameter = 12;
+    const maxOffset = 8; // how far pupil can move from eye center
+
+    // Left eye center
+    const leftEyeX = frog.body.x - eyeOffsetX;
+    const leftEyeY = frog.body.y + eyeOffsetY;
+    let dx = fly.x - leftEyeX;
+    let dy = fly.y - leftEyeY;
+    let d = dist(leftEyeX, leftEyeY, fly.x, fly.y);
+    let scale = d > 0 ? Math.min(1, maxOffset / d) : 0;
+    const leftPupilX = leftEyeX + dx * scale;
+    const leftPupilY = leftEyeY + dy * scale;
+
+    // Right eye center
+    const rightEyeX = frog.body.x + eyeOffsetX;
+    const rightEyeY = frog.body.y + eyeOffsetY;
+    dx = fly.x - rightEyeX;
+    dy = fly.y - rightEyeY;
+    d = dist(rightEyeX, rightEyeY, fly.x, fly.y);
+    scale = d > 0 ? Math.min(1, maxOffset / d) : 0;
+    const rightPupilX = rightEyeX + dx * scale;
+    const rightPupilY = rightEyeY + dy * scale;
+
+    fill("#000000");
+    noStroke();
+    ellipse(leftPupilX, leftPupilY, pupilDiameter);
+    ellipse(rightPupilX, rightPupilY, pupilDiameter);
     pop();
 }
+
 
 /**
  * Handles the tongue overlapping the fly
@@ -177,6 +226,8 @@ function checkTongueFlyOverlap() {
         resetFly();
         // Bring back the tongue
         frog.tongue.state = "inbound";
+        // Increase score when fly is caught
+        score += 1;
     }
 }
 
@@ -184,7 +235,58 @@ function checkTongueFlyOverlap() {
  * Launch the tongue on click (if it's not launched yet)
  */
 function mousePressed() {
+    // If the game hasn't started yet, start it on any click
+    if (!gameStarted) {
+        gameStarted = true;
+        return;
+    }
+
+    // Otherwise, use click to launch the tongue as before
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
+}
+
+/**
+ * Start the game when any key is pressed
+ */
+function keyPressed() {
+    if (!gameStarted) {
+        gameStarted = true;
+    }
+}
+
+/**
+ * Draws the press-to-start overlay with a pulsing instruction
+ */
+function startScreen() {
+    push();
+    // Semi-transparent overlay
+    fill(0, 0, 0, 120);
+    rect(0, 0, width, height);
+    // Pulsing text alpha (defines alpha used below)
+    const pulse = (sin(frameCount * 0.06) + 1) / 2;
+    const alpha = lerp(150, 255, pulse);
+
+    textAlign(CENTER, CENTER);
+    fill(255, alpha);
+    noStroke();
+    textSize(48);
+    text("Press any key or click to start", width / 2, height / 2 - 20);
+
+    textSize(18);
+    fill(255, 200);
+    text("Move the frog with your mouse — click to launch the tongue", width / 2, height / 2 + 30);
+    pop();
+}
+
+// Point gain when fly is caught
+function drawScore() {
+    push();
+    textAlign(LEFT, TOP);
+    textSize(24);
+    fill(255);
+    noStroke();
+    text(`Score: ${score}`, 10, 10);
+    pop();
 }
