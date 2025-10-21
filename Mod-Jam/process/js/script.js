@@ -44,7 +44,7 @@ const frog = {
 const fly = {
     x: 0,
     y: 200, // Will be random
-    size: 10,
+    size: 15,
     speed: 3
 };
 
@@ -67,6 +67,7 @@ function draw() {
         drawFly();
         drawFrog();
         startScreen();
+        endGame();
         return;
     }
 
@@ -76,9 +77,9 @@ function draw() {
     moveFrog();
     moveTongue();
     drawFrog();
+    checkTongueFlyOverlap();
     // Draw score on top of game
     drawScore();
-    checkTongueFlyOverlap();
 }
 
 /**
@@ -102,6 +103,8 @@ function drawFly() {
     noStroke();
     fill("#000000");
     ellipse(fly.x, fly.y, fly.size);
+    fill("#7a7a7aff");
+    ellipse(fly.x - 5, fly.y - 3, fly.size + 2, fly.size / 2);
     pop();
 }
 
@@ -247,14 +250,6 @@ function mousePressed() {
     }
 }
 
-/**
- * Start the game when any key is pressed
- */
-function keyPressed() {
-    if (!gameStarted) {
-        gameStarted = true;
-    }
-}
 
 /**
  * Draws the press-to-start overlay with a pulsing instruction
@@ -272,11 +267,11 @@ function startScreen() {
     fill(255, alpha);
     noStroke();
     textSize(48);
-    text("Press any key or click to start", width / 2, height / 2 - 20);
+    text("CLICK TO START", width / 2, height / 2 - 20);
 
     textSize(18);
     fill(255, 200);
-    text("Move the frog with your mouse — click to launch the tongue", width / 2, height / 2 + 30);
+    text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 30);
     pop();
 }
 
@@ -290,3 +285,4 @@ function drawScore() {
     text(`Score: ${score}`, 10, 10);
     pop();
 }
+
