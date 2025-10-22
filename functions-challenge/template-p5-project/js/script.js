@@ -55,15 +55,17 @@ function draw() {
     background("#87ceeb");
 
     movePaddle(paddle);
+
     moveBall(ball);
-    moveBall2(ball2);
+    moveBall(ball2);
 
     handleBounce(ball, paddle);
     handleBounce(ball2, paddle);
 
     drawPaddle(paddle);
+    
     drawBall(ball);
-    drawBall2(ball2);
+    drawBall(ball2);
 }
 
 /**
@@ -80,11 +82,6 @@ function movePaddle(paddle) {
 function moveBall(ball) {
     ball.x += ball.velocity.x;
     ball.y += ball.velocity.y + 1;
-}
-
-function moveBall2(ball2) {
-    ball2.x += ball2.velocity.x;
-    ball2.y += ball2.velocity.y + 1;
 }
 
 /**
@@ -135,15 +132,6 @@ function drawBall(ball) {
     noStroke();
     fill("pink");
     rect(ball.x, ball.y, ball.width, ball.height);
-    pop();
-}
-
-function drawBall2(ball2) {
-    push();
-    rectMode(CENTER);
-    noStroke();
-    fill("pink");
-    rect(ball2.x, ball2.y, ball2.width, ball2.height);
     pop();
 }
 
