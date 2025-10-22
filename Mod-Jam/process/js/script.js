@@ -67,7 +67,6 @@ function draw() {
         drawFly();
         drawFrog();
         startScreen();
-        endGame();
         return;
     }
 
