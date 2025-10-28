@@ -287,13 +287,15 @@ function drawScore() {
     pop();
 }
 
-<<<<<<< Updated upstream:Mod-Jam/on-going/js/script.js
 /**
  * End game screen
  */
 
 function endScreen() {
     if (score >= 5) {
+        frog.tongue.state = "idle";
+        frog.body.x = 0;
+        
     push();
     // Semi-transparent overlay
     fill(0, 0, 0, 120);
@@ -321,10 +323,5 @@ function mouseClicked() {
     }
 }
 
-/**
- * Add audio
- */
-=======
 
->>>>>>> Stashed changes:Mod-Jam/process/js/script.js
 
