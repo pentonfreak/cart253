@@ -48,6 +48,13 @@ const fly = {
     speed: 3
 };
 
+const clouds = {
+    x: [100, 200, 500],
+    y: [50, 80, 40],
+    size: [80, 100, 60],
+    speed: [1, 0.5, 0.8]
+}
+
 /**
  * Creates the canvas and initializes the fly
  */
@@ -69,14 +76,20 @@ function draw() {
         startScreen();
         return;
     }
-
+    
     // Main game loop
+    drawBackground();
+    moveClouds();
+    drawClouds();
     moveFly();
     drawFly();
+
     moveFrog();
     moveTongue();
     drawFrog();
     checkTongueFlyOverlap();
+
+
     // Draw score on top of game
     drawScore();
 
@@ -84,12 +97,47 @@ function draw() {
 }
 
 /**
+ * Draw background (sky and ground, moving clouds)
+ */
+function drawBackground() {
+    //Ground
+    push();
+    noStroke();
+    fill("#018d01ff");
+    rect(0, height - 100, width, 100);
+    pop();
+}
+
+function moveClouds() {
+    for (let i = 0; i < clouds.x.length; i++) {
+        clouds.x[i] += clouds.speed[i];
+        // Reset cloud if it goes off screen
+        if (clouds.x[i] - clouds.size[i]/2 > width) {
+            clouds.x[i] = -clouds.size[i]/2;
+            clouds.y[i] = random(20, 100);
+        }
+    }
+}
+function drawClouds() {
+    for (let i = 0; i < clouds.x.length; i++) {
+        push();
+        noStroke();
+        fill("#ffffff");
+        ellipse(clouds.x[i], clouds.y[i], clouds.size[i], clouds.size[i] * 0.6);
+        pop();
+    }
+}
+
+
+/**
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
 function moveFly() {
     // Move the fly
-    fly.x += fly.speed;
+    fly.x += fly.speed + random(1, 10);
+    //Move the fly in a sine wave pattern
+    fly.y += sin(frameCount * 1) * 5;
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly();
@@ -118,7 +166,7 @@ function resetFly() {
 }
 
 /**
- * Moves the frog to the mouse position on x
+ * Moves the frog to the keyboard's x position
  */
 function moveFrog() {
     frog.body.x = mouseX;
@@ -286,16 +334,17 @@ function drawScore() {
     text(`Score: ${score}`, 10, 10);
     pop();
 }
+/**
+ * Game time limit and win condition
+ */
+
 
 /**
  * End game screen
  */
 
 function endScreen() {
-    if (score >= 5) {
-        frog.tongue.state = "idle";
-        frog.body.x = 0;
-        
+    if (score >= 30) {
     push();
     // Semi-transparent overlay
     fill(0, 0, 0, 120);
@@ -314,7 +363,7 @@ function endScreen() {
 }
 
 function mouseClicked() {
-    if (score >= 5) {
+    if (score >= 30) {
         score = 0;
         gameStarted = false;
         resetFly();
@@ -322,6 +371,11 @@ function mouseClicked() {
         frog.tongue.y = 480;
     }
 }
+
+/**
+ * Show game time limit
+ */
+
 
 
 
