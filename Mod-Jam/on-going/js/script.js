@@ -79,6 +79,8 @@ function draw() {
     checkTongueFlyOverlap();
     // Draw score on top of game
     drawScore();
+
+    endScreen();
 }
 
 /**
@@ -283,5 +285,38 @@ function drawScore() {
     noStroke();
     text(`Score: ${score}`, 10, 10);
     pop();
+}
+
+/**
+ * End game screen
+ */
+
+function endScreen() {
+    if (score >= 5) {
+    push();
+    // Semi-transparent overlay
+    fill(0, 0, 0, 120);
+    rect(0, 0, width, height);
+    textAlign(CENTER, CENTER);
+    fill(255);
+    noStroke();
+    textSize(48);
+    text("GAME OVER", width / 2, height / 2 - 20);
+    textSize(24);
+    text(`Final Score: ${score}`, width / 2, height / 2 + 30);
+    textSize(24);
+    text("Click to restart", width / 2, height / 2 + 60);
+    pop();
+    }
+}
+
+function mouseClicked() {
+    if (score >= 5) {
+        score = 0;
+        gameStarted = false;
+        resetFly();
+        frog.tongue.state = "idle";
+        frog.tongue.y = 480;
+    }
 }
 
