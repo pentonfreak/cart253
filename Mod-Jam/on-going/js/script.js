@@ -287,6 +287,7 @@ function drawScore() {
     pop();
 }
 
+<<<<<<< Updated upstream:Mod-Jam/on-going/js/script.js
 /**
  * End game screen
  */
@@ -323,4 +324,7 @@ function mouseClicked() {
 /**
  * Add audio
  */
+=======
+
+>>>>>>> Stashed changes:Mod-Jam/process/js/script.js
 
