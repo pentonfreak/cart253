@@ -287,7 +287,6 @@ function drawScore() {
     pop();
 }
 
-<<<<<<< Updated upstream:Mod-Jam/on-going/js/script.js
 /**
  * End game screen
  */
@@ -320,7 +319,8 @@ function mouseClicked() {
         frog.tongue.y = 480;
     }
 }
-=======
 
->>>>>>> Stashed changes:Mod-Jam/process/js/script.js
+/**
+ * Add audio
+ */
 
