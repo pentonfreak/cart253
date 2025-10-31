@@ -20,6 +20,11 @@ let gameStarted = false;
 // Player score
 let score = 0;
 
+// Add timer
+let gameStartTime = 0;
+const GAME_DURATION = 30 * 1000;
+let gameOver = false;
+
 // Our frog
 const frog = {
     // The frog's body has a position and size
@@ -55,6 +60,14 @@ const clouds = {
     speed: [1, 0.5, 0.8]
 }
 
+// start target that the frog must eat to start the game
+const startTarget = {
+    x: undefined,
+    y: undefined,
+    size: 80,
+    eaten: false
+}
+
 /**
  * Creates the canvas and initializes the fly
  */
@@ -63,6 +76,10 @@ function setup() {
 
     // Give the fly its first random position
     resetFly();
+
+    // center the start target
+    startTarget.x = width / 2;
+    startTarget.y = height / 2;
 }
 
 function draw() {
@@ -70,12 +87,45 @@ function draw() {
 
     // If the game hasn't started yet, show the start screen
     if (!gameStarted) {
+        // Allow the player to move the frog and fire the tongue on the start screen
+        moveFrog();
+        moveTongue();
+
         // Draw a static scene behind the start overlay so the canvas isn't empty
+        drawBackground();
+        moveClouds();
+        drawClouds();
         drawFly();
         drawFrog();
-        startScreen();
+
+        // Draw the eat-to-start target and check for tongue overlap
+        if (!startTarget.eaten) {
+            drawStartTarget();
+            checkStartTargetOverlap();
+        }
+
+        if (!gameOver) {
+            startScreen();
+        }
+        else {
+            endScreen();
+        }
         return;
     }
+
+    if (!gameOver && millis() - gameStartTime >= GAME_DURATION) {
+        gameOver = true;
+        gameStarted = false;
+
+        frog.tongue.state = "idle";
+        frog.tongue.y = 480;
+    }
+
+    // Draw score on top of game
+    drawScore();
+
+    // Show remaining time
+    drawTimer();
     
     // Main game loop
     drawBackground();
@@ -88,11 +138,7 @@ function draw() {
     moveTongue();
     drawFrog();
     checkTongueFlyOverlap();
-
-
-    // Draw score on top of game
-    drawScore();
-
+    
     endScreen();
 }
 
@@ -287,13 +333,7 @@ function checkTongueFlyOverlap() {
  * Launch the tongue on click (if it's not launched yet)
  */
 function mousePressed() {
-    // If the game hasn't started yet, start it on any click
-    if (!gameStarted) {
-        gameStarted = true;
-        return;
-    }
-
-    // Otherwise, use click to launch the tongue as before
+    // Always use click to launch the tongue (even on start screen)
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
@@ -342,9 +382,8 @@ function drawScore() {
 /**
  * End game screen
  */
-
 function endScreen() {
-    if (score >= 30) {
+    if (score >= 15 || gameOver) {
     push();
     // Semi-transparent overlay
     fill(0, 0, 0, 120);
@@ -363,18 +402,63 @@ function endScreen() {
 }
 
 function mouseClicked() {
-    if (score >= 30) {
+    if (score >= 15 || gameOver) {
         score = 0;
         gameStarted = false;
+        gameOver = false;
         resetFly();
         frog.tongue.state = "idle";
         frog.tongue.y = 480;
+        startTarget.eaten = false;
     }
 }
 
 /**
  * Show game time limit
  */
+
+function drawTimer() {
+    const timeElapsed = millis() - gameStartTime;
+    const timeLeft = max(0, GAME_DURATION - timeElapsed);
+    const secondsLeft = ceil(timeLeft / 1000);
+
+    push();
+    const pulse = (sin(frameCount * 0.09) + 1) / 2;
+    const alpha = lerp(150, 255, pulse);
+    textAlign(CENTER, CENTER);
+    textSize(200);
+    fill(255, alpha);
+    noStroke();
+    text(`${secondsLeft}`, width / 2, height / 2);
+    pop();
+}
+
+// New: draw the start target (a little circle with label)
+function drawStartTarget() {
+    push();
+    noStroke();
+    fill("#ffcc00ff");
+    ellipse(startTarget.x, startTarget.y, startTarget.size);
+    pop();
+}
+
+// New: check overlap between tongue and start target, start the game when eaten
+function checkStartTargetOverlap() {
+    // Only check if tongue is active (outbound or inbound)
+    if (frog.tongue.state === "idle") return;
+
+    const d = dist(frog.tongue.x, frog.tongue.y, startTarget.x, startTarget.y);
+    const overlap = d < frog.tongue.size / 2 + startTarget.size / 2;
+    if (overlap) {
+        startTarget.eaten = true;
+        // begin the game
+        gameStarted = true;
+        gameOver = false;
+        gameStartTime = millis();
+        // pull tongue back
+        frog.tongue.state = "inbound";
+    }
+}
 
 
 
