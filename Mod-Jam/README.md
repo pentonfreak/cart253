@@ -1,4 +1,4 @@
-# TITLE OF PROJECT
+# MOD JAM
 
 Khuong Nguyen
 
@@ -6,30 +6,25 @@ Khuong Nguyen
 
 ## Description
 
-This description should help the reader understand what the program is, anything they should know to be able to experience it (controls, special features, etc.), and what the desired user experience is. For example:
+For me, this is the frogfrogfrog game of Mr. Pippin Bar that I have modded will be the base game for the Variation Jam.
+Where the frog eats flies.
+In 1 minute, the frog has to eats as many flies it could.
+In the beginning, you will see a start screen with the flashing "Click to start" and the instruction below it. But, to start, you have to slurp the sun first.
+When began, you will see the moving clouds and the "ground". The fly is actually flies in to sine wave pattern but, by adding the SFX and narrowing down the perimeter, it looks like the flies is really buzzin'. Then, when you clicked the mouse, the frog will shoot out its tongue and make a sound.
+So in 1 minute, try to eat a whole bunch!! GLHF!!!
 
-> *The Mayor of Clown Town* is a simulator experience that allows the user to control a small town populated entirely by clowns.
-
-> The experience is controlled via the mouse, with left click selecting a clown and bringing up a menu of options such as "slip of banana peel" or "get into impossible capacious clown-car."
-
-> The project is meant to give the user a sense of what it would be the mayor of a town of clowns, eventually getting the sense that clowns are not taking their civic duties seriously.
 
 ## Screenshot(s)
 
 This bit should have some images of the program running so that the reader has a sense of what it looks like. For example:
-
-> ![Image of a clown face](./assets/images/clown.png)
+> (./assets/images/Mod-Jam.png)
 
 ## Attribution
 
-This bit should attribute any code, assets or other elements used taken from other sources. For example:
-
+> - The base code of this program was provided by Pippin Bar
 > - This project uses [p5.js](https://p5js.org).
-> - The clown image is a capture of the clown from the Apple emoji character set.
-> - The barking sound effect is "single dog bark 1" by crazymonke9 from freesound.org: https://freesound.org/people/crazymonke9/sounds/418107/
+> - The frog's slurp effect is "Cartoon Slurp" - https://freesound.org/people/Breviceps/sounds/573583
+> - The fly sound effect is "House fly, buzzing around bathroom, noisy, 2011" - https://freesound.org/people/TRP/sounds/577281
 
 ## License
 
-This bit should include the license you want to apply to your work. For example:
-
-> This project is licensed under a Creative Commons Attribution ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en)) license with the exception of libraries and other components with their own licenses.

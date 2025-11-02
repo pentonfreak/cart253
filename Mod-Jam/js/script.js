@@ -22,7 +22,7 @@ let score = 0;
 
 // Add timer
 let gameStartTime = 0;
-const GAME_DURATION = 30 * 1000;
+const GAME_DURATION = 60 * 1000;
 let gameOver = false;
 
 // Our frog
@@ -320,6 +320,11 @@ function checkTongueFlyOverlap() {
     // Check if it's an overlap
     const eaten = (d < frog.tongue.size/2 + fly.size/2);
     if (eaten) {
+        // Play fly buzz sound
+        if (flyBuzzSound && flyBuzzSound.isLoaded()) {
+            flyBuzzSound.setVolume(0.6);
+            flyBuzzSound.play();
+        }
         // Reset the fly
         resetFly();
         // Bring back the tongue
@@ -335,8 +340,11 @@ function checkTongueFlyOverlap() {
 
 let tongueSound;
 
+let flyBuzzSound;
+
 function preload() {
     tongueSound = loadSound('assets/sounds/cartoon-slurp.wav');
+    flyBuzzSound = loadSound('assets/sounds/fly-buzzin.wav');
 }
 
 /**
@@ -348,6 +356,7 @@ function mousePressed() {
         frog.tongue.state = "outbound";
     }
     if (tongueSound.isLoaded()) {
+        tongueSound.setVolume(0.5);
         tongueSound.play();
     }
 }
@@ -373,7 +382,13 @@ function startScreen() {
 
     textSize(18);
     fill(255, 200);
-    text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 30);
+    text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
+    pop();
+
+    textAlign(CENTER, CENTER);
+    textSize(26);
+    fill(255, 200);
+    text("YOU HAVE SIXTY SECONDS", width / 2, height / 2 + 60);
     pop();
 }
 
@@ -396,7 +411,7 @@ function drawScore() {
  * End game screen
  */
 function endScreen() {
-    if (score >= 15 || gameOver) {
+    if (score >= 999 || gameOver) {
     push();
     // Semi-transparent overlay
     fill(0, 0, 0, 120);
@@ -415,7 +430,7 @@ function endScreen() {
 }
 
 function mouseClicked() {
-    if (score >= 15 || gameOver) {
+    if (score >= 999 || gameOver) {
         score = 0;
         gameStarted = false;
         gameOver = false;
