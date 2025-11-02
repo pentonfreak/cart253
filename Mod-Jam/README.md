@@ -2,7 +2,10 @@
 
 Khuong Nguyen
 
-[View this project online](URL_FOR_THE_RUNNING_PROJECT)
+[View this project online]
+https://pentonfreak.github.io/cart253/Mod-Jam
+
+https://github.com/pentonfreak/cart253/tree/main/Mod-Jam
 
 ## Description
 
