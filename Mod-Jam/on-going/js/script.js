@@ -330,12 +330,25 @@ function checkTongueFlyOverlap() {
 }
 
 /**
+ * SFX
+ */
+
+let tongueSound;
+
+function preload() {
+    tongueSound = loadSound('assets/sounds/cartoon-slurp.wav');
+}
+
+/**
  * Launch the tongue on click (if it's not launched yet)
  */
 function mousePressed() {
     // Always use click to launch the tongue (even on start screen)
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
+    }
+    if (tongueSound.isLoaded()) {
+        tongueSound.play();
     }
 }
 
