@@ -402,10 +402,6 @@ function drawScore() {
     text(`Score: ${score}`, 10, 10);
     pop();
 }
-/**
- * Game time limit and win condition
- */
-
 
 /**
  * End game screen
