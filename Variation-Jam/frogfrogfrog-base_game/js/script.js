@@ -1,6 +1,6 @@
 /**
- * Frogfrogfrog
- * Pippin Barr
+ * Frogfrogfrog - Base Game
+ * Khuong Nguyen
  * 
  * A game of catching flies with your frog-tongue
  * 
