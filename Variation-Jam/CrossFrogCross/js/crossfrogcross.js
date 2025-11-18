@@ -128,9 +128,9 @@ function draw() {
     drawTimer();
     
     // Main game loop
-    // drawBackground();
-    // moveClouds();
-    // drawClouds();
+    drawBackground();
+    moveClouds();
+    drawClouds();
     moveFly();
     drawFly();
 
@@ -145,34 +145,34 @@ function draw() {
 /**
  * Draw background (sky and ground, moving clouds)
  */
-// function drawBackground() {
-//     //Ground
-//     push();
-//     noStroke();
-//     fill("#018d01ff");
-//     rect(0, height - 100, width, 100);
-//     pop();
-// }
+function drawBackground() {
+    //Ground
+    push();
+    noStroke();
+    fill("#018d01ff");
+    rect(0, height - 100, width, 100);
+    pop();
+}
 
-// function moveClouds() {
-//     for (let i = 0; i < clouds.x.length; i++) {
-//         clouds.x[i] += clouds.speed[i];
-//         // Reset cloud if it goes off screen
-//         if (clouds.x[i] - clouds.size[i]/2 > width) {
-//             clouds.x[i] = -clouds.size[i]/2;
-//             clouds.y[i] = random(20, 100);
-//         }
-//     }
-// }
-// function drawClouds() {
-//     for (let i = 0; i < clouds.x.length; i++) {
-//         push();
-//         noStroke();
-//         fill("#ffffff");
-//         ellipse(clouds.x[i], clouds.y[i], clouds.size[i], clouds.size[i] * 0.6);
-//         pop();
-//     }
-// }
+function moveClouds() {
+    for (let i = 0; i < clouds.x.length; i++) {
+        clouds.x[i] += clouds.speed[i];
+        // Reset cloud if it goes off screen
+        if (clouds.x[i] - clouds.size[i]/2 > width) {
+            clouds.x[i] = -clouds.size[i]/2;
+            clouds.y[i] = random(20, 100);
+        }
+    }
+}
+function drawClouds() {
+    for (let i = 0; i < clouds.x.length; i++) {
+        push();
+        noStroke();
+        fill("#ffffff");
+        ellipse(clouds.x[i], clouds.y[i], clouds.size[i], clouds.size[i] * 0.6);
+        pop();
+    }
+}
 
 
 /**
