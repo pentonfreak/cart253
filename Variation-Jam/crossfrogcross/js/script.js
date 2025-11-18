@@ -16,6 +16,7 @@
 "use strict";
 
 // Whether the game has started (press any key or click to begin)
+let frameRate = 60;
 let gameStarted = false;
 // Player score
 let score = 0;
@@ -24,6 +25,9 @@ let score = 0;
 let gameStartTime = 0;
 const GAME_DURATION = 60 * 1000;
 let gameOver = false;
+
+// new: which frog is currently active (true = lower frog shown first)
+let lowerActive = true;
 
 // Our frog
 const frog = {
@@ -38,7 +42,25 @@ const frog = {
         x: undefined,
         y: 480,
         size: 20,
-        speed: 20,
+        speed: 30,
+        // Determines how the tongue moves each frame
+        state: "idle" // State can be: idle, outbound, inbound
+    }, 
+};
+// Upside down frog
+const upsideDownfrog = {
+    // The frog's body has a position and size
+    body: {
+        x: 320,
+        y: -40,
+        size: 150
+    },
+    // The frog's tongue has a position, size, speed, and state
+    tongue: {
+        x: undefined,
+        y: 80,
+        size: 20,
+        speed: 30,
         // Determines how the tongue moves each frame
         state: "idle" // State can be: idle, outbound, inbound
     }, 
@@ -52,13 +74,6 @@ const fly = {
     size: 15,
     speed: 3
 };
-
-const clouds = {
-    x: [100, 200, 500],
-    y: [50, 80, 40],
-    size: [80, 100, 60],
-    speed: [1, 0.5, 0.8]
-}
 
 // start target that the frog must eat to start the game
 const startTarget = {
@@ -93,10 +108,13 @@ function draw() {
 
         // Draw a static scene behind the start overlay so the canvas isn't empty
         drawBackground();
-        moveClouds();
-        drawClouds();
         drawFly();
-        drawFrog();
+        // draw only the lower frog on the start screen
+        if (lowerActive) {
+            drawFrog();
+        } else {
+            drawupsideDownFrog();
+        }
 
         // Draw the eat-to-start target and check for tongue overlap
         if (!startTarget.eaten) {
@@ -118,7 +136,9 @@ function draw() {
         gameStarted = false;
 
         frog.tongue.state = "idle";
-        frog.tongue.y = 480;
+        frog.tongue.y = frog.body.y - frog.body.size / 2;
+        upsideDownfrog.tongue.state = "idle";
+        upsideDownfrog.tongue.y = upsideDownfrog.body.y + upsideDownfrog.body.size / 2;
     }
 
     // Draw score on top of game
@@ -129,15 +149,22 @@ function draw() {
     
     // Main game loop
     drawBackground();
-    moveClouds();
-    drawClouds();
     moveFly();
     drawFly();
 
-    moveFrog();
-    moveTongue();
-    drawFrog();
-    checkTongueFlyOverlap();
+    // Only move/draw the active frog and its tongue
+    if (lowerActive) {
+        moveFrog();
+        moveTongue();
+        drawFrog();
+    } else {
+        moveupsideDownFrog();
+        moveupsideDownTongue();
+        drawupsideDownFrog();
+    }
+
+    // Check overlap only for the active frog
+    checkActiveTongueFlyOverlap();
     
     endScreen();
 }
@@ -151,29 +178,12 @@ function drawBackground() {
     noStroke();
     fill("#018d01ff");
     rect(0, height - 100, width, 100);
+    //upper ground
+    noStroke();
+    fill("#0ead00ff");
+    rect(0, height - 480, width, 100);
     pop();
 }
-
-function moveClouds() {
-    for (let i = 0; i < clouds.x.length; i++) {
-        clouds.x[i] += clouds.speed[i];
-        // Reset cloud if it goes off screen
-        if (clouds.x[i] - clouds.size[i]/2 > width) {
-            clouds.x[i] = -clouds.size[i]/2;
-            clouds.y[i] = random(20, 100);
-        }
-    }
-}
-function drawClouds() {
-    for (let i = 0; i < clouds.x.length; i++) {
-        push();
-        noStroke();
-        fill("#ffffff");
-        ellipse(clouds.x[i], clouds.y[i], clouds.size[i], clouds.size[i] * 0.6);
-        pop();
-    }
-}
-
 
 /**
  * Moves the fly according to its speed
@@ -208,7 +218,7 @@ function drawFly() {
  */
 function resetFly() {
     fly.x = 0;
-    fly.y = random(0, 300);
+    fly.y = random(100, 375);
 }
 
 /**
@@ -216,6 +226,9 @@ function resetFly() {
  */
 function moveFrog() {
     frog.body.x = mouseX;
+}
+function moveupsideDownFrog() {
+    upsideDownfrog.body.x = mouseX;
 }
 
 /**
@@ -245,6 +258,32 @@ function moveTongue() {
         }
     }
 }
+function moveupsideDownTongue() {
+    // Tongue matches the frog's x
+    upsideDownfrog.tongue.x = upsideDownfrog.body.x;
+    // If the tongue is idle, it doesn't do anything
+    if (upsideDownfrog.tongue.state === "idle") {
+        // Do nothing
+    }
+    // If the tongue is outbound, it moves down
+    else if (upsideDownfrog.tongue.state === "outbound") {
+        upsideDownfrog.tongue.y += upsideDownfrog.tongue.speed;
+        // The tongue bounces back if it hits the bottom
+        if (upsideDownfrog.tongue.y >= height) {
+            upsideDownfrog.tongue.state = "inbound";
+        }
+    }
+    // If the tongue is inbound, it moves up
+    else if (upsideDownfrog.tongue.state === "inbound") {
+        upsideDownfrog.tongue.y += -upsideDownfrog.tongue.speed;
+        // The tongue stops if it hits the top
+        if (upsideDownfrog.tongue.y <= 0) {
+            upsideDownfrog.tongue.state = "idle";
+        }
+    }
+}
+
+
 
 /**
  * Displays the tongue (tip and line connection) and the frog (body)
@@ -310,6 +349,69 @@ function drawFrog() {
     pop();
 }
 
+function drawupsideDownFrog() {
+    // Draw the tongue tip
+    push();
+    fill("#ff0000");
+    noStroke();
+    ellipse(upsideDownfrog.tongue.x, upsideDownfrog.tongue.y, upsideDownfrog.tongue.size);
+    pop();
+
+    // Draw the rest of the tongue
+    push();
+    stroke("#ff0000");
+    strokeWeight(upsideDownfrog.tongue.size);
+    line(upsideDownfrog.tongue.x, upsideDownfrog.tongue.y, upsideDownfrog.body.x, upsideDownfrog.body.y);
+    pop();
+
+    // Draw the frog's body
+    push();
+    fill("#00ff00");
+    noStroke();
+    ellipse(upsideDownfrog.body.x, upsideDownfrog.body.y, upsideDownfrog.body.size);
+    pop();
+
+    // Draw the frog's eyes (flipped vertically)
+    push();
+    fill("#ffffff");
+    noStroke();
+    // For an upside-down frog the eyes sit below the body center
+    ellipse(upsideDownfrog.body.x - 30, upsideDownfrog.body.y + 50, 40);
+    ellipse(upsideDownfrog.body.x + 30, upsideDownfrog.body.y + 50, 40);
+
+    // Pupils that follow the fly, constrained inside each eye
+    const eyeOffsetX = 30;
+    const eyeOffsetY = 50; // positive for upside-down
+    const pupilDiameter = 12;
+    const maxOffset = 8;
+
+    // Left eye center
+    const leftEyeX = upsideDownfrog.body.x - eyeOffsetX;
+    const leftEyeY = upsideDownfrog.body.y + eyeOffsetY;
+    let dx = fly.x - leftEyeX;
+    let dy = fly.y - leftEyeY;
+    let d = dist(leftEyeX, leftEyeY, fly.x, fly.y);
+    let scale = d > 0 ? Math.min(1, maxOffset / d) : 0;
+    const leftPupilX = leftEyeX + dx * scale;
+    const leftPupilY = leftEyeY + dy * scale;
+
+    // Right eye center
+    const rightEyeX = upsideDownfrog.body.x + eyeOffsetX;
+    const rightEyeY = upsideDownfrog.body.y + eyeOffsetY;
+    dx = fly.x - rightEyeX;
+    dy = fly.y - rightEyeY;
+    d = dist(rightEyeX, rightEyeY, fly.x, fly.y);
+    scale = d > 0 ? Math.min(1, maxOffset / d) : 0;
+    const rightPupilX = rightEyeX + dx * scale;
+    const rightPupilY = rightEyeY + dy * scale;
+
+    fill("#000000");
+    noStroke();
+    ellipse(leftPupilX, leftPupilY, pupilDiameter);
+    ellipse(rightPupilX, rightPupilY, pupilDiameter);
+    pop();
+}
+
 
 /**
  * Handles the tongue overlapping the fly
@@ -351,10 +453,19 @@ function preload() {
  * Launch the tongue on click (if it's not launched yet)
  */
 function mousePressed() {
-    // Always use click to launch the tongue (even on start screen)
-    if (frog.tongue.state === "idle") {
-        frog.tongue.state = "outbound";
+    // Always use click to launch the active frog's tongue (even on start screen)
+    if (lowerActive) {
+        if (frog.tongue.state === "idle") {
+            frog.tongue.state = "outbound";
+        }
+    } else {
+        if (upsideDownfrog.tongue.state === "idle") {
+            // ensure tongue starts just below the upside-down frog so it shoots downward
+            upsideDownfrog.tongue.y = upsideDownfrog.body.y + upsideDownfrog.body.size / 2 + 8;
+            upsideDownfrog.tongue.state = "outbound";
+        }
     }
+
     if (tongueSound.isLoaded()) {
         tongueSound.setVolume(0.5);
         tongueSound.play();
@@ -395,11 +506,11 @@ function startScreen() {
 // Point gain when fly is caught
 function drawScore() {
     push();
-    textAlign(LEFT, TOP);
-    textSize(24);
+    textAlign(CENTER, LEFT);
+    textSize(30);
     fill(255);
     noStroke();
-    text(`Score: ${score}`, 10, 10);
+    text(`${score}`, 10, 250);
     pop();
 }
 
@@ -422,6 +533,9 @@ function endScreen() {
     textSize(24);
     text("Click to restart", width / 2, height / 2 + 60);
     pop();
+
+    tongueSound.stop();
+    flyBuzzSound.stop();
     }
 }
 
@@ -432,7 +546,7 @@ function mouseClicked() {
         gameOver = false;
         resetFly();
         frog.tongue.state = "idle";
-        frog.tongue.y = 480;
+        frog.tongue.y = frog.body.y - frog.body.size / 2;
         startTarget.eaten = false;
     }
 }
@@ -466,7 +580,7 @@ function drawStartTarget() {
     pop();
 }
 
-// New: check overlap between tongue and start target, start the game when eaten
+// check overlap between tongue and start target, start the game when eaten
 function checkStartTargetOverlap() {
     // Only check if tongue is active (outbound or inbound)
     if (frog.tongue.state === "idle") return;
@@ -482,6 +596,45 @@ function checkStartTargetOverlap() {
         // pull tongue back
         frog.tongue.state = "inbound";
     }
+}
+
+/**
+ * Checks overlap between the active frog's tongue and the fly.
+ * If eaten, reset fly, play SFX, toggle which frog is active, reset tongues.
+ */
+function checkActiveTongueFlyOverlap() {
+    const activeTongue = lowerActive ? frog.tongue : upsideDownfrog.tongue;
+
+    // ensure tongue has valid coords before checking
+    if (typeof activeTongue.x === 'undefined' || typeof activeTongue.y === 'undefined') return;
+
+    const d = dist(activeTongue.x, activeTongue.y, fly.x, fly.y);
+    const eaten = (d < activeTongue.size/2 + fly.size/2);
+    if (!eaten) return;
+
+    // Play fly buzz sound
+    if (flyBuzzSound && flyBuzzSound.isLoaded()) {
+        flyBuzzSound.setVolume(0.6);
+        flyBuzzSound.play();
+    }
+
+    // Reset the fly
+    resetFly();
+
+    // Bring back the active tongue
+    activeTongue.state = "inbound";
+
+    // Increase score
+    score += 1;
+
+    // Toggle which frog is active
+    lowerActive = !lowerActive;
+
+    // Reset both tongues to safe starting positions for the new active frog
+    frog.tongue.state = "idle";
+    frog.tongue.y = frog.body.y - frog.body.size / 2;
+    upsideDownfrog.tongue.state = "idle";
+    upsideDownfrog.tongue.y = upsideDownfrog.body.y + upsideDownfrog.body.size / 2;
 }
 
 
