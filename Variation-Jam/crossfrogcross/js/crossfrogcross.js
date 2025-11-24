@@ -209,7 +209,9 @@ function drawFly() {
     fill("#000000");
     ellipse(fly.x, fly.y, fly.size);
     fill("#7a7a7aff");
-    ellipse(fly.x - 5, fly.y - 3, fly.size + 2, fly.size / 2);
+    ellipse(fly.x - 5, fly.y - 3, fly.size + 5, fly.size / 2);
+    fill("#7a7a7aff");
+    ellipse(fly.x - 5, fly.y + 3, fly.size + 5, fly.size / 2);
     pop();
 }
 
