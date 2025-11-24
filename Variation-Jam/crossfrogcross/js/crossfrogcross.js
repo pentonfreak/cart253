@@ -21,6 +21,10 @@ let gameStarted = false;
 // Player score
 let score = 0;
 
+
+// Add font
+let myFont;
+
 // Add timer
 let gameStartTime = 0;
 const GAME_DURATION = 60 * 1000;
@@ -439,7 +443,7 @@ function checkTongueFlyOverlap() {
 }
 
 /**
- * SFX
+ * Preload assets
  */
 
 let tongueSound;
@@ -449,6 +453,7 @@ let flyBuzzSound;
 function preload() {
     tongueSound = loadSound('assets/sounds/cartoon-slurp.wav');
     flyBuzzSound = loadSound('assets/sounds/fly-buzzin.wav');
+    myFont = loadFont('assets/fonts/Frogotype.ttf');
 }
 
 /**
