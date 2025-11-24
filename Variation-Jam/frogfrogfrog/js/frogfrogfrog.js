@@ -25,6 +25,9 @@ let gameStartTime = 0;
 const GAME_DURATION = 60 * 1000;
 let gameOver = false;
 
+// Custom font
+let myFont; 
+
 // Our frog
 const frog = {
     // The frog's body has a position and size
@@ -121,9 +124,6 @@ function draw() {
         frog.tongue.y = 480;
     }
 
-    // Draw score on top of game
-    drawScore();
-
     // Show remaining time
     drawTimer();
     
@@ -164,6 +164,9 @@ function moveClouds() {
         }
     }
 }
+
+// Draw clouds and put score inside first cloud
+
 function drawClouds() {
     for (let i = 0; i < clouds.x.length; i++) {
         push();
@@ -171,8 +174,22 @@ function drawClouds() {
         fill("#ffffff");
         ellipse(clouds.x[i], clouds.y[i], clouds.size[i], clouds.size[i] * 0.6);
         pop();
+
+        // Draw score inside first cloud and give it a font
+        if (i === 0) {
+            push();
+            textAlign(CENTER, CENTER);
+            textSize(24);
+            textFont(myFont);
+            fill("#87ceeb");
+            noStroke();
+            text(`${score}`, clouds.x[i], clouds.y[i]);
+            pop();
+        }
     }
 }
+
+
 
 
 /**
@@ -335,7 +352,7 @@ function checkTongueFlyOverlap() {
 }
 
 /**
- * SFX
+ * Preload assets
  */
 
 let tongueSound;
@@ -345,6 +362,7 @@ let flyBuzzSound;
 function preload() {
     tongueSound = loadSound('assets/sounds/cartoon-slurp.wav');
     flyBuzzSound = loadSound('assets/sounds/fly-buzzin.wav');
+    myFont = loadFont('assets/font/Frogotype.ttf');
 }
 
 /**
@@ -389,17 +407,6 @@ function startScreen() {
     textSize(26);
     fill(255, 200);
     text("YOU HAVE SIXTY SECONDS", width / 2, height / 2 + 60);
-    pop();
-}
-
-// Point gain when fly is caught
-function drawScore() {
-    push();
-    textAlign(LEFT, TOP);
-    textSize(24);
-    fill(255);
-    noStroke();
-    text(`Score: ${score}`, 10, 10);
     pop();
 }
 
@@ -451,6 +458,7 @@ function drawTimer() {
     const alpha = lerp(150, 255, pulse);
     textAlign(CENTER, CENTER);
     textSize(200);
+    textFont(myFont);
     fill(255, alpha);
     noStroke();
     text(`${secondsLeft}`, width / 2, height / 2);

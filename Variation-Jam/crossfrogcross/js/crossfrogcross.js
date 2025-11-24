@@ -22,9 +22,6 @@ let gameStarted = false;
 let score = 0;
 
 
-// Add font
-let myFont;
-
 // Add timer
 let gameStartTime = 0;
 const GAME_DURATION = 60 * 1000;
@@ -292,7 +289,7 @@ function moveupsideDownTongue() {
 
 
 /**
- * Displays the tongue (tip and line connection) and the frog (body)
+ * Displays the tongue (tip and line connection) and the frog (body) and let score hover over it
  */
 function drawFrog() {
     // Draw the tongue tip
@@ -450,10 +447,12 @@ let tongueSound;
 
 let flyBuzzSound;
 
+let myFont;
+
 function preload() {
     tongueSound = loadSound('assets/sounds/cartoon-slurp.wav');
     flyBuzzSound = loadSound('assets/sounds/fly-buzzin.wav');
-    myFont = loadFont('assets/fonts/Frogotype.ttf');
+    myFont = loadFont('assets/font/Frogotype.ttf');
 }
 
 /**
@@ -514,10 +513,11 @@ function startScreen() {
 function drawScore() {
     push();
     textAlign(CENTER, LEFT);
-    textSize(30);
+    textSize(50);
+    textFont(myFont);
     fill(255);
     noStroke();
-    text(`${score}`, 10, 250);
+    text(`${score}`, 20, 250);
     pop();
 }
 
@@ -572,6 +572,7 @@ function drawTimer() {
     const alpha = lerp(150, 255, pulse);
     textAlign(CENTER, CENTER);
     textSize(200);
+    textFont(myFont);
     fill(255, alpha);
     noStroke();
     text(`${secondsLeft}`, width / 2, height / 2);
