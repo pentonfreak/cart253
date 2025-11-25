@@ -1,6 +1,6 @@
 /**
- * Frogfrogfrog
- * Pippin Barr
+ * Drog & Grog
+ * Khuong Nguyen
  * 
  * A game of catching flies with your frog-tongue
  * 
@@ -396,15 +396,18 @@ function startScreen() {
     fill(255, alpha);
     noStroke();
     textSize(48);
+    textFont(myFont);
     text("CLICK TO START", width / 2, height / 2 - 20);
 
     textSize(18);
+    textFont(myFont);
     fill(255, 200);
     text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
     pop();
 
     textAlign(CENTER, CENTER);
     textSize(26);
+    textFont(myFont);
     fill(255, 200);
     text("YOU HAVE SIXTY SECONDS", width / 2, height / 2 + 60);
     pop();
@@ -420,6 +423,7 @@ function endScreen() {
     fill(0, 0, 0, 120);
     rect(0, 0, width, height);
     textAlign(CENTER, CENTER);
+    textFont(myFont);
     fill(255);
     noStroke();
     textSize(48);
