@@ -492,6 +492,7 @@ function startScreen() {
     const alpha = lerp(150, 255, pulse);
 
     textAlign(CENTER, CENTER);
+    textFont(myFont);
     fill(255, alpha);
     noStroke();
     textSize(48);
@@ -531,6 +532,7 @@ function endScreen() {
     fill(0, 0, 0, 120);
     rect(0, 0, width, height);
     textAlign(CENTER, CENTER);
+    textFont(myFont);
     fill(255);
     noStroke();
     textSize(48);

@@ -41,7 +41,7 @@ const frog = {
         x: undefined,
         y: 480,
         size: 20,
-        speed: 20,
+        speed: 30,
         // Determines how the tongue moves each frame
         state: "idle" // State can be: idle, outbound, inbound
     }, 
@@ -52,8 +52,17 @@ const frog = {
 const fly = {
     x: 0,
     y: 200, // Will be random
-    size: 15,
-    speed: 3
+    size: 25,
+    speed: 5,
+};
+
+const awkwardfly = {
+    x: 640,
+    y: 200, // Will be random
+    size: 25,
+    speed: 15,
+    // remember the starting X so we can loop back to it
+    startX: 640
 };
 
 const clouds = {
@@ -99,6 +108,7 @@ function draw() {
         moveClouds();
         drawClouds();
         drawFly();
+        drawAwkwardFly();
         drawFrog();
 
         // Draw the eat-to-start target and check for tongue overlap
@@ -133,11 +143,14 @@ function draw() {
     drawClouds();
     moveFly();
     drawFly();
+    moveAwkwardFly();
+    drawAwkwardFly();
 
     moveFrog();
     moveTongue();
     drawFrog();
     checkTongueFlyOverlap();
+    checkTongueAwkwardFlyOverlap();
     
     endScreen();
 }
@@ -207,6 +220,19 @@ function moveFly() {
     }
 }
 
+function moveAwkwardFly() {
+    // Move the awkward fly leftwards (backward)
+    awkwardfly.x -= awkwardfly.speed + random(0, 3);
+    // Move the fly in a sine wave pattern
+    awkwardfly.y += sin(frameCount * 1) * 5;
+    // Reset the awkward fly to its start position when it goes off the left edge
+    if (awkwardfly.x + awkwardfly.size/2 < 0) {
+        awkwardfly.x = awkwardfly.startX;
+        awkwardfly.y = random(0, 300);
+    }
+}
+
+
 /**
  * Draws the fly as a black circle
  */
@@ -220,12 +246,30 @@ function drawFly() {
     pop();
 }
 
+function drawAwkwardFly() {
+    push();
+    noStroke();
+    fill("#000000");
+    ellipse(awkwardfly.x, awkwardfly.y, awkwardfly.size);
+    fill("#ff0000ff");
+    ellipse(awkwardfly.x - 5, awkwardfly.y - 3, awkwardfly.size + 2, awkwardfly.size / 2);
+    pop();
+}
+
+
+
+
 /**
  * Resets the fly to the left with a random y
  */
 function resetFly() {
     fly.x = 0;
     fly.y = random(0, 300);
+}
+
+function resetAwkwardFly() {
+    awkwardfly.x = awkwardfly.startX;
+    awkwardfly.y = random(0, 300);
 }
 
 /**
@@ -351,6 +395,31 @@ function checkTongueFlyOverlap() {
     }
 }
 
+function checkTongueAwkwardFlyOverlap() {
+    // Get distance from tongue to fly
+    const d = dist(frog.tongue.x, frog.tongue.y, awkwardfly.x, awkwardfly.y);
+    // Check if it's an overlap
+    const eaten = (d < frog.tongue.size/2 + awkwardfly.size/2);
+    if (eaten) {
+        // Play fly buzz sound
+        if (flyBuzzSound && flyBuzzSound.isLoaded()) {
+            flyBuzzSound.setVolume(0.6);
+            flyBuzzSound.play();
+        }
+        // Reset the fly
+        resetAwkwardFly();
+        // Bring back the tongue
+        frog.tongue.state = "inbound";
+        // Increase score when fly is caught
+        score -= 1;
+    }
+}
+
+
+
+
+
+
 /**
  * Preload assets
  */
@@ -395,14 +464,20 @@ function startScreen() {
     textAlign(CENTER, CENTER);
     fill(255, alpha);
     noStroke();
-    textSize(48);
+    textSize(50);
     textFont(myFont);
     text("CLICK TO START", width / 2, height / 2 - 20);
 
-    textSize(18);
+    textSize(25);
     textFont(myFont);
     fill(255, 200);
     text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
+    pop();
+
+    textSize(25);
+    textFont(myFont);
+    fill(255, 200);
+    text("Beware of the Weird One", width / 2, height / 2 + 10);
     pop();
 
     textAlign(CENTER, CENTER);
@@ -426,11 +501,11 @@ function endScreen() {
     textFont(myFont);
     fill(255);
     noStroke();
-    textSize(48);
+    textSize(50);
     text("GAME OVER", width / 2, height / 2 - 20);
-    textSize(24);
+    textSize(25);
     text(`Final Score: ${score}`, width / 2, height / 2 + 30);
-    textSize(24);
+    textSize(25);
     text("Click to restart", width / 2, height / 2 + 60);
     pop();
     }
