@@ -1,5 +1,5 @@
 /**
- * Drog & Grog
+ * +1 -1 Variation Jam
  * Khuong Nguyen
  * 
  * A game of catching flies with your frog-tongue
@@ -53,14 +53,14 @@ const fly = {
     x: 0,
     y: 200, // Will be random
     size: 25,
-    speed: 5,
+    speed: 4,
 };
 
 const awkwardfly = {
     x: 640,
     y: 200, // Will be random
     size: 25,
-    speed: 15,
+    speed: 10,
     // remember the starting X so we can loop back to it
     startX: 640
 };
