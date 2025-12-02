@@ -11,8 +11,17 @@ From the base game FrogFrogFrog, I have developed 2 more variation for it. The f
 
 
 ## Screenshot(s)
+FrogFrogFrog
+> (./asset/frogfrogfrog.png)
 
+CrossFrogCross
+> (./asset/crossfrogcross-1.png)
+> (./asset/crossfrogcross-2.png)
 
+FrogDietFrog
+> (./asset/frogdietfrog.png)
+
+> (./asset/Font License.png)
 
 ## Attribution
 
@@ -23,3 +32,4 @@ From the base game FrogFrogFrog, I have developed 2 more variation for it. The f
 > - The font is Frogotype - https://www.dafont.com/frogotype.font
 ## License
 
+The license for non-commercial use of the font is in the "asset" file
