@@ -6,13 +6,13 @@ Khuong Nguyen
 https://github.com/pentonfreak/cart253/tree/main/Variation-Jam/The%20Frog%20Games/
 
 FrogFrogFrog
-https://pentonfreak.github.io/cart253/Variation-Jam/The Frog Games/frogfrogfrog
+https://pentonfreak.github.io/cart253/Variation-Jam/The%20Frog%20Games/frogfrogfrog
 
 CrossFrogCross
-https://pentonfreak.github.io/cart253/Variation-Jam/The Frog Games/crossfrogcross
+https://pentonfreak.github.io/cart253/Variation-Jam/The%20Frog%20Games/crossfrogcross
 
 FrogDietFrog
-https://pentonfreak.github.io/cart253/Variation-Jam/The Frog Games/frogdietfrog
+https://pentonfreak.github.io/cart253/Variation-Jam/The%20Frog%20Games/frogdietfrog
 
 ## Description
 Hello players,
