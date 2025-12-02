@@ -1,5 +1,5 @@
 /**
- * +1 -1 Variation Jam
+ * FrogDietFrog Variation Jam
  * Khuong Nguyen
  * 
  * A game of catching flies with your frog-tongue
@@ -416,10 +416,6 @@ function checkTongueAwkwardFlyOverlap() {
 }
 
 
-
-
-
-
 /**
  * Preload assets
  */
@@ -468,23 +464,29 @@ function startScreen() {
     textFont(myFont);
     text("CLICK TO START", width / 2, height / 2 - 20);
 
-    textSize(25);
+    textSize(32);
     textFont(myFont);
     fill(255, 200);
-    text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
+    text("Move Froggy with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
     pop();
 
-    textSize(25);
+    textSize(30);
     textFont(myFont);
     fill(255, 200);
-    text("Beware of the Weird One", width / 2, height / 2 + 10);
+    text("Eat enough = Good Heath (5 Flies)", width / 2, height / 2 + 35);
+    pop();
+
+    textSize(30);
+    textFont(myFont);
+    fill(255, 200);
+    text("Help Froggy, he doesn't like to be called skinny or fatty", width / 2, height / 2 + 50);
     pop();
 
     textAlign(CENTER, CENTER);
     textSize(26);
     textFont(myFont);
     fill(255, 200);
-    text("YOU HAVE SIXTY SECONDS", width / 2, height / 2 + 60);
+    text("YOU HAVE SIXTY SECONDS", width / 2, height / 2 + 80);
     pop();
 }
 
@@ -493,21 +495,33 @@ function startScreen() {
  */
 function endScreen() {
     if (score >= 999 || gameOver) {
-    push();
-    // Semi-transparent overlay
-    fill(0, 0, 0, 120);
-    rect(0, 0, width, height);
-    textAlign(CENTER, CENTER);
-    textFont(myFont);
-    fill(255);
-    noStroke();
-    textSize(50);
-    text("GAME OVER", width / 2, height / 2 - 20);
-    textSize(25);
-    text(`Final Score: ${score}`, width / 2, height / 2 + 30);
-    textSize(25);
-    text("Click to restart", width / 2, height / 2 + 60);
-    pop();
+        // Decide verdict based on score
+        let verdict;
+        if (score < 0) {
+            verdict = "SKINNY FROGGY";
+        } else if (score <= 5) {
+            verdict = "HEALTHY FROGGY";
+        } else {
+            verdict = "FATTY FROGGY";
+        }
+
+        push();
+        // Semi-transparent overlay
+        fill(0, 0, 0, 120);
+        rect(0, 0, width, height);
+        textAlign(CENTER, CENTER);
+        textFont(myFont);
+        fill(255);
+        noStroke();
+        textSize(50);
+        text("GAME OVER", width / 2, height / 2 - 40);
+        textSize(25);
+        text(`${score}`, width / 2, height / 2 + 0);
+        textSize(28);
+        text(verdict, width / 2, height / 2 + 40);
+        textSize(20);
+        text("Click to restart", width / 2, height / 2 + 80);
+        pop();
     }
 }
 

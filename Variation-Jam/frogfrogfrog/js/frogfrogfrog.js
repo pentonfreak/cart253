@@ -1,6 +1,6 @@
 /**
  * Frogfrogfrog
- * Pippin Barr
+ * Pippin Barr - Modder: Khuong Nguyen
  * 
  * A game of catching flies with your frog-tongue
  * 
@@ -402,7 +402,7 @@ function startScreen() {
     textSize(18);
     textFont(myFont);
     fill(255, 200);
-    text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
+    text("Move Froggy with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
     pop();
 
     textAlign(CENTER, CENTER);

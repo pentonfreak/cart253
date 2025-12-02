@@ -500,7 +500,12 @@ function startScreen() {
 
     textSize(20);
     fill(255, 200);
-    text("Move the frog with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
+    text("Move Froggy with your mouse & click to launch the tongue", width / 2, height / 2 + 10);
+    pop();
+
+    textSize(20);
+    fill(255, 200);
+    text("Froggy will cross to the other side if he eats the fly and vice versa!!!", width / 2, height / 2 + 35);
     pop();
 
     textAlign(CENTER, CENTER);
